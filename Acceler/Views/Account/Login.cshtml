@@ -1,0 +1,35 @@
+﻿@model Acceler.Models.LoginViewModel
+
+@{
+    ViewBag.Title = "Login";
+}
+
+<head>
+    <link rel="stylesheet" href="~/Content/Home/Login.css"/>
+</head>
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()    
+    <div class="containera">
+        <div class="form-header">Prijavi se</div>
+        @Html.ValidationSummary(true, "", new { @class = "my-text-danger" })
+        <div class="form-element">
+            @Html.LabelFor(model => model.Username, htmlAttributes: new { @class = "label" })
+            @Html.EditorFor(model => model.Username, new { htmlAttributes = new { @class = "input" } })
+            @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-element">
+            @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "label" })
+            @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "input", @type = "password" } })
+            @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-element">
+            <input type="submit" value="Prijava" class="button_submit" />
+        </div>
+        <a href="@Url.Action("Register", "Account")" class="link">Registriraj se</a>
+    </div>
+}
+

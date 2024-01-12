@@ -1,0 +1,49 @@
+﻿#instructions_h {
+    text-align:center;
+}
+
+h2 {
+    text-align:center;
+}
+
+#ride_name_div{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#ride_date_div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#ride_map_div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#ride_submit_div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.editor_for_name {
+    height: 2.5rem;
+    width: 20rem;
+    font-size: 1rem;
+    text-align: center;
+}
+
+.btn_dalje{
+    background-color: lightgreen;
+    color: black;
+    width: 7rem;
+    padding: 1rem;
+    margin:1rem;
+    border-radius: 30px;
+    font-weight: bold;
+    font-size:1rem;
+}

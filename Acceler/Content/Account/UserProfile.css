@@ -1,0 +1,12 @@
+﻿body {
+}
+
+.user_information {
+    display:flex;
+    flex-direction:column;
+}
+/*
+.info_element {
+    display:flex;
+    flex-direction:column;
+}*/

@@ -1,0 +1,62 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Quicksand:wght@300;400&family=Roboto:wght@100&family=Tangerine&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="~/Assets/favicon/favicon.png">
+    <title>Acceler</title>
+    <link rel="stylesheet" href="~/Content/Shared/Layout.css">
+    @Scripts.Render("~/bundles/modernizr")
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+    <script src="https://polyfill.io/v3/polyfill.js?features=default"></script>
+</head>
+<body>
+    @if (TempData["AlertMessage"] != null)
+    {
+        <script>
+        swal("@TempData["AlertTitle"]", "@TempData["AlertMessage"]", "@TempData["AlertType"]");
+        </script>
+    }
+
+    <nav class="navbar">
+        <div class="container">
+            <a href="@Url.Action("Index", "Home")" class="navbar-brand">Acceler</a>
+            <button type="button" class="navbar-toggler" title="Toggle navigation" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse">
+                <ul class="navbar-nav">
+                    @if (Session["User"] != null)
+                    {
+                        <li> Dobrodošli, @Session["User"]!</li>
+                        <li id="login_btn"><a href="@Url.Action("UserProfile", "Account", new { id = Session["UserId"] })" class="nav-link">Moj profil</a></li>
+                    }
+                    else
+                    {
+                        <li id="login_btn"><a href="@Url.Action("Login", "Account")" class="nav-link">Prijavi se</a></li>
+
+                    }
+                    <li><a href="@Url.Action("Rides", "Ride")" class="nav-link">Vožnje</a></li>
+                    <li id="create-ride"><a href="@Url.Action("Create", "Ride")" class="nav-link">KREIRAJ VOŽNJU</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div>
+        @RenderBody()
+        <footer>
+            <p>&copy; @DateTime.Now.Year - Acceler</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @RenderSection("scripts", required: false)
+
+
+
+</body>
+</html>

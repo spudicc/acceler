@@ -1,0 +1,39 @@
+﻿<link rel="stylesheet" href="~/Content/Account/UserProfile.css" />
+
+@model Acceler.Models.User
+
+@{
+    ViewBag.Title = "UserProfile";
+}
+
+<h2>Moj profil</h2>
+
+<div class="user_information">
+    <div class="info_element">
+        @Html.DisplayNameFor(model => model.Username)
+        @Html.DisplayFor(model => model.Username)
+    </div>
+    <div class="info_element">
+        @Html.DisplayNameFor(model => model.Password)
+        @Html.DisplayFor(model => model.Password)
+    </div>
+    <div class="info_element">
+        @Html.DisplayNameFor(model => model.FirstName)
+        @Html.DisplayFor(model => model.FirstName)
+    </div>
+    <div class="info_element">
+        @Html.DisplayNameFor(model => model.LastName)
+        @Html.DisplayFor(model => model.LastName)
+    </div>
+    <div class="info_element">
+        @Html.DisplayNameFor(model => model.Email)
+        @Html.DisplayFor(model => model.Email)
+    </div>
+    <div class="info_element">
+        @Html.DisplayNameFor(model => model.Phone)
+        @Html.DisplayFor(model => model.Phone)
+    </div>
+</div>
+<p>
+    @*@Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |*@
+</p>
