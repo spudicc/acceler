@@ -7,6 +7,7 @@ using System.Web.Mvc;
 
 namespace Acceler.Controllers
 {
+    [AllowAnonymous]
     public class HomeController : Controller
     {
         public ActionResult Index()

@@ -6,6 +6,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Quicksand:wght@300;400&family=Roboto:wght@100&family=Tangerine&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/20df88461f.js" crossorigin="anonymous"></script>
     <link rel="icon" type="image/x-icon" href="~/Assets/favicon/favicon.png">
     <title>Acceler</title>
     <link rel="stylesheet" href="~/Content/Shared/Layout.css">
@@ -24,39 +25,47 @@
 
     <nav class="navbar">
         <div class="container">
-            <a href="@Url.Action("Index", "Home")" class="navbar-brand">Acceler</a>
-            <button type="button" class="navbar-toggler" title="Toggle navigation" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="navbar-collapse">
+            <a href="@Url.Action("Index", "Home")" class="navbar-brand">Acceler</a>           
+            <div class="navbar-collapse" id="navbarList">
                 <ul class="navbar-nav">
                     @if (Session["User"] != null)
                     {
-                        <li> Dobrodošli, @Session["User"]!</li>
-                        <li id="login_btn"><a href="@Url.Action("UserProfile", "Account", new { id = Session["UserId"] })" class="nav-link">Moj profil</a></li>
+                        <li>@Session["User"]</li>
+                        <li id="action_btn"><a href="@Url.Action("UserProfile", "Account", new { id = Session["UserId"] })" class="nav-link"><i class="fa-regular fa-user" id="mobile-icons"></i><span id="navbar-titles"> Profil</span></a></li>
+                        <li id="action_btn"><a href="@Url.Action("Inbox", "Account", new { id = Session["UserId"] })" class="nav-link"><i class="fa-regular fa-envelope" id="mobile-icons"></i><span id="navbar-titles"> Inbox</span></a></li>
                     }
                     else
                     {
-                        <li id="login_btn"><a href="@Url.Action("Login", "Account")" class="nav-link">Prijavi se</a></li>
+                        <li id="action_btn"><a href="@Url.Action("Login", "Account")" class="nav-link"><i class="fa-regular fa-user" id="mobile-icons"></i><span id="navbar-titles">Prijava</span></a></li>
 
                     }
-                    <li><a href="@Url.Action("Rides", "Ride")" class="nav-link">Vožnje</a></li>
-                    <li id="create-ride"><a href="@Url.Action("Create", "Ride")" class="nav-link">KREIRAJ VOŽNJU</a></li>
+                    <li><a href="@Url.Action("Rides", "Ride")" class="nav-link"><i class="fa-solid fa-motorcycle" style="color: #ffffff;" id="mobile-icons"></i><span id="navbar-titles">Vožnje</span></a></li>
+                    <li id="create-ride"><a href="@Url.Action("Create", "Ride")" class="nav-link"><i class="fa-solid fa-plus" id="mobile-icons"></i><span id="navbar-titles"> KREIRAJ VOŽNJU</span></a></li>
                 </ul>
             </div>
         </div>
     </nav>
     <div>
         @RenderBody()
-        <footer>
-            <p>&copy; @DateTime.Now.Year - Acceler</p>
-        </footer>
     </div>
 
     @Scripts.Render("~/bundles/jquery")
     @RenderSection("scripts", required: false)
 
-
-
 </body>
 </html>
+
+@*<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var toggleButton = document.getElementById('navbarToggle');
+        var navbarList = document.getElementById('navbarList');
+
+        toggleButton.addEventListener('click', function () {
+            if (navbarList.style.display === 'block') {
+                navbarList.style.display = 'none';
+            } else {
+                navbarList.style.display = 'block';
+            }
+        });
+    });
+</script>*@

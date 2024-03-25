@@ -1,77 +1,87 @@
-﻿using Acceler.Models;
+﻿using Acceler.DAL;
+using Acceler.Models;
+using Microsoft.Ajax.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web.WebPages;
 
 namespace Acceler.Repository
 {
     public class RideRepository
     {
-        private List<Ride> testRides = new List<Ride>();
+        private AccelerDbContext context = new AccelerDbContext();
+
+        private AccountRepository accountRepository = new AccountRepository();
+
         public RideRepository()
         {
-            this.testRides = new List<Ride>
-            {
-                new Ride {
-                    Id = "1",
-                Name = "Na putu prema Jadranu",
-                Date = DateTime.Now,
-                StartingPointLatitude = 45.8150,
-                StartingPointLongitude = 15.9819,
-                EndingPointLatitude = 45.4872,
-                EndingPointLongitude = 15.5478,
-                AvoidHighways = true,
-                Waypoints = new List<Waypoint>(), // You can initialize Waypoints if needed
-                Owner = new User(), // You can initialize Owner if needed
-                Members = new List<User>() // You can initialize Members if needed
-                },
-                new Ride {
-                    Id = "2",
-                Name = "Seoskim putevima",
-                Date = DateTime.Now,
-                StartingPointLatitude = 45.7110,
-                StartingPointLongitude = 16.0682,
-                EndingPointLatitude = 45.4872,
-                EndingPointLongitude = 15.5478,
-                AvoidHighways = true,
-                Waypoints = new List<Waypoint>(), // You can initialize Waypoints if needed
-                Owner = new User(), // You can initialize Owner if needed
-                Members = new List<User>() // You can initialize Members if needed
-                },
-                new Ride {
-                Id = "3",
-                Name = "Đir po centru",
-                Date = DateTime.Now,
-                StartingPointLatitude = 45.7110,
-                StartingPointLongitude = 16.0682,
-                EndingPointLatitude = 45.8150,
-                EndingPointLongitude = 15.9819,
-                AvoidHighways = true,
-                Waypoints = new List<Waypoint>(), // You can initialize Waypoints if needed
-                Owner = new User(), // You can initialize Owner if needed
-                Members = new List<User>() // You can initialize Members if needed
-                }
-            };
-        }
 
-        public IList<Ride> GetRides()
-        {
-            return testRides;
         }
 
         public void CreateRide(Ride ride)
         {
-            testRides.Add(ride);
+            var rideowner = accountRepository.GetRideOwner(ride.RideOwnerId.Value);
+
+            try
+            {
+                if (rideowner == null)
+                    accountRepository.CreateRideOwner(accountRepository.GetUser(ride.RideOwnerId.Value));
+
+                ride.RideOwnerId = accountRepository.GetRideOwner(ride.RideOwnerId.Value).Id;
+
+                context.Rides.Add(ride);
+                context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
-        public Ride GetRide(string rideId)
+        public Ride GetRide(int rideId)
         {
-            return testRides.FirstOrDefault(r => r.Id == rideId);
+            var ride = context.Rides.FirstOrDefault(r => r.Id == rideId);
+            ride.Waypoints = context.Waypoints.Where(w => w.RideId == ride.Id.ToString()).ToList();
+
+            return ride;
         }
 
-        public void AddMemberToRide(User member, string rideId)
+        public IEnumerable<Ride> GetRides()
         {
-            testRides.FirstOrDefault(r => r.Id == rideId).Members.Add(member);
+            var rides = context.Rides;
+            foreach (var ride in rides)
+            {
+                ride.Waypoints = context.Waypoints.Where(w => w.RideId == ride.Id.ToString()).ToList();
+            }
+            return rides;
+        }
+
+        public void AddMemberToRide(User member, int rideId)
+        {
+            try
+            {
+                context.Rides.FirstOrDefault(r => r.Id == rideId).RideMembers.Add(context.Users.FirstOrDefault(u => u.Id == member.Id));
+                context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public IEnumerable<Waypoint> CreateWaypoints(ICollection<Waypoint> waypoints)
+        {
+            try
+            {
+                context.Waypoints.AddRange(waypoints);
+                context.SaveChanges();
+                return waypoints;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

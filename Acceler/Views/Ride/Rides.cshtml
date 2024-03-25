@@ -2,6 +2,7 @@
     <link rel="stylesheet" type="text/css" href="~/Content/Ride/rides.css" />
 </head>
 
+@using Acceler.Models.DTO
 @model IEnumerable<Acceler.Models.Ride>
 @{
     ViewBag.Title = "View";
@@ -15,7 +16,12 @@
         StartingPointLongitude = item.StartingPointLongitude,
         EndingPointLatitude = item.EndingPointLatitude,
         EndingPointLongitude = item.EndingPointLongitude,
-        AvoidHighways = item.AvoidHighways
+        AvoidHighways = item.AvoidHighways,
+        Waypoints = item.Waypoints.Select(wp => new WaypointDTO
+        {
+            Latitude = wp.Latitude,
+            Longitude = wp.Longitude
+        })
     }));
 }
 
@@ -28,16 +34,19 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </h2>
             <div>
-                created by user @item.Owner.FirstName @item.Owner.LastName
+                created by user @item.RideOwner.User.FirstName @item.RideOwner.User.LastName
             </div>
             <div>
                 starting @Html.DisplayFor(modelItem => item.Date)
             </div>
             <div id="map" class="allMaps" data-item-id="@item.Id"></div>
             @Html.ActionLink("PRIDRUŽI SE", "JoinRide", "Ride", new { rideId = item.Id } , new { @class = "btn_join" })
+                @if(item.RideMembers != null)
+                {
             <p>
-                Ovoj turi pridružilo se @item.Members.Count() vozača
+                Ovoj turi pridružilo se @item.RideMembers.Count() vozača
             </p>
+                }
         </div>
     }
 
@@ -69,24 +78,44 @@
             directionsRenderer.setMap(map);
             calculateAndDisplayRoute(directionsService, directionsRenderer, foundItem);
         })
-        //document.getElementById("mode").addEventListener("change", () => {
-        //    calculateAndDisplayRoute(directionsService, directionsRenderer);
-        //});
     }
 
     function calculateAndDisplayRoute(directionsService, directionsRenderer, foundItem) {
-        directionsService
-            .route({
-                origin: new google.maps.LatLng(foundItem.StartingPointLatitude, foundItem.StartingPointLongitude),
-                destination: new google.maps.LatLng(foundItem.EndingPointLatitude, foundItem.EndingPointLongitude),
-                travelMode: "DRIVING",
-                avoidHighways: foundItem.AvoidHighways
-            })
-            .then((response) => {
-                directionsRenderer.setDirections(response);
-                console.log(response);
-            })
-        /*.catch((e) => window.alert("Directions request failed due to " + error));*/
+
+        if (foundItem.Waypoints != null && foundItem.Waypoints.length > 0) {
+            var mappedWaypoints = [];
+
+            foundItem.Waypoints.forEach(function (waypoint) {
+                const waypoint1 = { location: { lat: parseFloat(waypoint.Latitude), lng: parseFloat(waypoint.Longitude) } };
+                mappedWaypoints.push(waypoint1);
+            });
+
+            directionsService
+                .route({
+                    origin: new google.maps.LatLng(foundItem.StartingPointLatitude, foundItem.StartingPointLongitude),
+                    destination: new google.maps.LatLng(foundItem.EndingPointLatitude, foundItem.EndingPointLongitude),
+                    travelMode: "DRIVING",
+                    avoidHighways: foundItem.AvoidHighways,
+                    waypoints: mappedWaypoints
+                })
+                .then((response) => {
+                    directionsRenderer.setDirections(response);
+                    console.log(response);
+                })
+        }
+        else {
+            directionsService
+                .route({
+                    origin: new google.maps.LatLng(foundItem.StartingPointLatitude, foundItem.StartingPointLongitude),
+                    destination: new google.maps.LatLng(foundItem.EndingPointLatitude, foundItem.EndingPointLongitude),
+                    travelMode: "DRIVING",
+                    avoidHighways: foundItem.AvoidHighways
+                })
+                .then((response) => {
+                    directionsRenderer.setDirections(response);
+                    console.log(response);
+                })
+        }        
     }
 
     window.initMap = initMap;

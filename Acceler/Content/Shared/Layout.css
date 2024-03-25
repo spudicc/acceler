@@ -4,7 +4,7 @@
 }
 
 .navbar {
-    background-color: #343a40;
+    background-color: black;
     padding: 10px;
 }
 
@@ -19,7 +19,6 @@
     text-decoration: none;
     font-size: 18px;
     font-weight: bold;
-
 }
 
 .navbar-toggler {
@@ -41,12 +40,17 @@
     .navbar-nav li {
         margin-right: 15px;
         padding: 0.5rem;
+        color: #ffffff;
     }
 
 .nav-link {
     color: #ffffff;
     text-decoration: none;
     font-size: 16px;
+}
+
+.nav-link:hover{
+    color: aquamarine;
 }
 
 footer {
@@ -63,23 +67,24 @@ footer {
     font-weight: 700;
 }
 
-/* Add responsive styles as needed */
-@media (max-width: 768px) {
-    .navbar-collapse {
-        display: none;
-        flex-basis: 100%;
-        margin-top: 10px;
-    }
+#action-btn i {
+    display: none;
+}
 
-    .navbar-toggler {
+.navbar-collapse {
+    flex-wrap: wrap;
+}
+
+#mobile-icons {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    #mobile-icons {
         display: block;
     }
 
-    .navbar-nav {
-        flex-direction: column;
+    #navbar-titles {
+        display: none;
     }
-
-        .navbar-nav li {
-            margin: 5px 0;
-        }
 }

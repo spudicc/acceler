@@ -1,0 +1,36 @@
+﻿body {
+    background-color: gray;
+}
+
+.searchDiv {
+    display: flex;
+    flex-direction:column;
+    align-items: center;
+    margin:auto;
+    margin-top:5rem;
+}
+
+#searchInput {
+    border: solid 1px black;
+    border-radius: 15px;
+    padding: 0.5rem;
+    font-family: 'Quicksand', sans-serif;
+    font-size: 1.3rem;
+    width:20rem;
+}
+
+#userList {
+    background-color: white;
+    text-decoration: none;
+    border: solid 1px black;
+    border-radius: 15px;
+    font-family: 'Quicksand', sans-serif;
+    font-size: 1rem;
+    margin: 0;
+    width: 17rem;
+}
+
+#talkjs-container {
+    width: 80%;
+    height:100%;
+}

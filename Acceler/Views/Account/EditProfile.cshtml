@@ -1,0 +1,64 @@
+﻿@model Acceler.Models.ViewModels.UserProfileViewModel
+<link rel="stylesheet" href="~/Content/Account/UserProfile.css" />
+<link rel="stylesheet" href="~/Content/Account/EditProfile.css" />
+
+@{
+    ViewBag.Title = "EditProfile";
+}
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.Id)
+    <div class="content">
+        <div class="user_information">
+            <div class="profile_photo">
+                <img src="~/Assets/Images/default_profile_image.jpg" />
+            </div>
+            <div class="information_div">
+                <div class="info_element">
+                    @Html.LabelFor(model => model.Username, htmlAttributes: new { @class = "html_label" })
+                    @Html.EditorFor(model => model.Username, new { htmlAttributes = new { @class = "html_editor" } })
+                    @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="info_element">
+                    @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "html_label" })
+                    @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "html_editor", @type = "password" } })
+                    @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="info_element">
+                    @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "html_label" })
+                    @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "html_editor" } })
+                    @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="info_element">
+                    @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "html_label" })
+                    @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "html_editor" } })
+                    @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="info_element">
+                    @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "html_label" })
+                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "html_editor" } })
+                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="info_element">
+                    @Html.LabelFor(model => model.Phone, htmlAttributes: new { @class = "html_label" })
+                    @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "html_editor" } })
+                    @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+                </div>
+                <input type="submit" value="Spremi promjene" class="button_save" />
+            </div>
+        </div>
+        <div class="shortcuts">
+            @Html.ActionLink("Natrag", "UserProfile", new { id = Model.Id }, new { @class = "btn_profile_action" })
+        </div>
+    </div>
+
+
+}

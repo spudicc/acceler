@@ -1,12 +1,90 @@
-﻿body {
+﻿.content {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: space-between;
+}
+
+h2 {
+    text-align: center;
 }
 
 .user_information {
     display:flex;
-    flex-direction:column;
+    flex-direction:row;
+    flex-wrap: wrap;
+    padding: 1rem;
+    align-content: center;
+    align-items:center;
 }
-/*
+
+.user_information div{
+    margin:1rem;
+}
+
+.profile_photo img {
+    height: 18rem;
+    width: auto;
+    border-radius: 50%;
+    border: 1px solid black;
+}
+
+.information_div{
+    padding: 0.5rem;
+}
+
 .info_element {
-    display:flex;
-    flex-direction:column;
-}*/
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+}
+
+.html_label {
+    color: red;
+    font-weight: 600;
+}
+
+.shortcuts {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    padding: 1rem;
+}
+
+#rides_info_div {
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: center;
+}
+
+.btn_profile_action {
+    text-decoration: none;
+    background-color: gray;
+    border-radius: 25px;
+    font-weight: 700;
+    color: white;
+    text-align:center;
+    padding: 0.4rem;
+    margin: 0.2rem;
+}
+
+    .btn_profile_action:hover {
+        background-color: #bfbfbf;
+    }
+
+.btn_profile_rides {
+    text-decoration: none;
+    background-color: #e8faed;
+    border-radius: 25px;
+    font-weight: 700;
+    text-align: center;
+    padding: 0.4rem;
+    margin: 0.2rem;
+}
+
+    .btn_profile_rides:hover {
+        background-color: #b1fcc6;
+    }

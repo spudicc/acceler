@@ -1,39 +1,82 @@
 ﻿<link rel="stylesheet" href="~/Content/Account/UserProfile.css" />
 
-@model Acceler.Models.User
+@model Acceler.Models.ViewModels.UserProfileViewModel
 
 @{
     ViewBag.Title = "UserProfile";
 }
-
-<h2>Moj profil</h2>
-
-<div class="user_information">
-    <div class="info_element">
-        @Html.DisplayNameFor(model => model.Username)
-        @Html.DisplayFor(model => model.Username)
+<body>
+    <div class="content">
+        <div class="user_information">
+            <div class="profile_photo">
+                <img src="~/Assets/Images/default_profile_image.jpg" />
+            </div>
+            @Html.HiddenFor(m => m.Id)
+            <div class="information_div">
+                <div class="info_element">
+                    @Html.LabelFor(model => model.Username, htmlAttributes: new { @class = "html_label" }) :
+                    @Html.DisplayFor(model => model.Username)
+                </div>
+                <div class="info_element">
+                    @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "html_label" }) :
+                    @Html.DisplayFor(model => model.FirstName)
+                </div>
+                <div class="info_element">
+                    @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "html_label" }) :
+                    @Html.DisplayFor(model => model.LastName)
+                </div>
+                <div class="info_element">
+                    @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "html_label" }) :
+                    @Html.DisplayFor(model => model.Email)
+                </div>
+                <div class="info_element">
+                    @Html.LabelFor(model => model.Phone, htmlAttributes: new { @class = "html_label" }) :
+                    @Html.DisplayFor(model => model.Phone)
+                </div>
+            </div>
+            <div id="rides_info_div">
+                <div class="info_element">
+                    @Html.LabelFor(model => model.JoinedRides, htmlAttributes: new { @class = "html_label" }) :
+                    @if (Model.JoinedRides != null && Model.JoinedRides.Count() != 0)
+                    {
+                        foreach (Acceler.Models.Ride joinedRide in Model.JoinedRides)
+                        {
+                            <div>
+                                <a class="btn_profile_rides" href="@Url.Action("Details", "Ride", new { id = joinedRide.Id })">@joinedRide.Name</a>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div>
+                            Ovaj korisnik još nije pridružen nijednoj vožnji.
+                        </div>
+                    }
+                </div>
+                <div class="info_element">
+                    @Html.LabelFor(model => model.CreatedRides, htmlAttributes: new { @class = "html_label" }) :
+                    @if (Model.CreatedRides != null && Model.CreatedRides.Count() != 0)
+                    {
+                        foreach (Acceler.Models.Ride createdRide in Model.CreatedRides)
+                        {
+                            <div>
+                                <a class="btn_profile_rides" href="@Url.Action("Details", "Ride", new { id = createdRide.Id })">@createdRide.Name</a> 
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                    <div>
+                        Ovaj korisnik još nije kreirao nijednu vožnju.
+                    </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="shortcuts">
+            @Html.ActionLink("Uredi profil", "EditProfile", "Account", new { id = Model.Id }, new { @class = "btn_profile_action", style = "text-decoration: none;background-color: gray;border-radius: 25px;font-weight: 700; color: white; text-align:center; padding: 0.2rem; margin: 0.2rem;" })
+            @Html.ActionLink("Odjava", "Logout", "Account", new { @class = "btn_profile_action", style = "text-decoration: none;background-color: gray;border-radius: 25px;font-weight: 700; color: white; text-align:center; padding: 0.2rem; margin: 0.2rem;" })
+            <a class="btn_profile_action" href="@Url.Action("Index", "Home")">Početna stranica</a>
+        </div>
     </div>
-    <div class="info_element">
-        @Html.DisplayNameFor(model => model.Password)
-        @Html.DisplayFor(model => model.Password)
-    </div>
-    <div class="info_element">
-        @Html.DisplayNameFor(model => model.FirstName)
-        @Html.DisplayFor(model => model.FirstName)
-    </div>
-    <div class="info_element">
-        @Html.DisplayNameFor(model => model.LastName)
-        @Html.DisplayFor(model => model.LastName)
-    </div>
-    <div class="info_element">
-        @Html.DisplayNameFor(model => model.Email)
-        @Html.DisplayFor(model => model.Email)
-    </div>
-    <div class="info_element">
-        @Html.DisplayNameFor(model => model.Phone)
-        @Html.DisplayFor(model => model.Phone)
-    </div>
-</div>
-<p>
-    @*@Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |*@
-</p>
+</body>

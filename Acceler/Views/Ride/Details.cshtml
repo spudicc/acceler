@@ -1,0 +1,115 @@
+﻿<head>
+    <link rel="stylesheet" type="text/css" href="~/Content/Ride/rides.css" />
+</head>
+
+@using Acceler.Models.DTO
+@model Acceler.Models.Ride
+
+@{
+    ViewBag.Title = "View";
+}
+@{
+    var serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+    var jsModel = serializer.Serialize(new
+    {
+        Id = Model.Id,
+        StartingPointLatitude = Model.StartingPointLatitude,
+        StartingPointLongitude = Model.StartingPointLongitude,
+        EndingPointLatitude = Model.EndingPointLatitude,
+        EndingPointLongitude = Model.EndingPointLongitude,
+        AvoidHighways = Model.AvoidHighways,
+        Waypoints = Model.Waypoints.Select(wp => new WaypointDTO
+        {
+            Latitude = wp.Latitude,
+            Longitude = wp.Longitude
+        })
+    });
+}
+
+
+<div class="ride_container">
+    <h2>
+        @Html.DisplayFor(m => m.Name)
+    </h2>
+    <div>
+        created by user @Model.RideOwner.User.FirstName @Model.RideOwner.User.LastName
+    </div>
+    <div>
+        starting @Html.DisplayFor(m => m.Date)
+    </div>
+    <div id="map" data-item-id="@Model.Id"></div>
+    @Html.ActionLink("PRIDRUŽI SE", "JoinRide", "Ride", new { rideId = Model.Id }, new { @class = "btn_join" })
+    @if (Model.RideMembers != null)
+    {
+        <p>
+            Ovoj turi pridružilo se @Model.RideMembers.Count() vozača
+        </p>
+    }
+</div>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyApOmG9SZxHFO1__cGEGaeDaCPJtbVtV1w&callback=initMap&v=weekly"
+        defer></script>
+
+<script>
+    let map;
+
+    async function initMap() {
+        const foundItem = @Html.Raw(jsModel);
+
+        const position = { lat : foundItem.StartingPointLatitude, lng : foundItem.StartingPointLongitude };
+
+        map = new google.maps.Map(document.getElementById("map"), {
+            zoom: 15,
+            center: position,
+            mapId: "DEMO_MAP_ID",
+            mapTypeId: "roadmap"
+        });
+
+        const directionsRenderer = new google.maps.DirectionsRenderer();
+        const directionsService = new google.maps.DirectionsService();
+
+        directionsRenderer.setMap(map);
+        calculateAndDisplayRoute(directionsService, directionsRenderer, foundItem);
+
+    }
+
+    function calculateAndDisplayRoute(directionsService, directionsRenderer, foundItem) {
+
+        if (foundItem.Waypoints != null && foundItem.Waypoints.length > 0) {
+            var mappedWaypoints = [];
+
+            foundItem.Waypoints.forEach(function (waypoint) {
+                const waypoint1 = { location: { lat: parseFloat(waypoint.Latitude), lng: parseFloat(waypoint.Longitude) } };
+                mappedWaypoints.push(waypoint1);
+            });
+
+            directionsService
+                .route({
+                    origin: new google.maps.LatLng(foundItem.StartingPointLatitude, foundItem.StartingPointLongitude),
+                    destination: new google.maps.LatLng(foundItem.EndingPointLatitude, foundItem.EndingPointLongitude),
+                    travelMode: "DRIVING",
+                    avoidHighways: foundItem.AvoidHighways,
+                    waypoints: mappedWaypoints
+                })
+                .then((response) => {
+                    directionsRenderer.setDirections(response);
+                    console.log(response);
+                })
+        }
+        else {
+            directionsService
+                .route({
+                    origin: new google.maps.LatLng(foundItem.StartingPointLatitude, foundItem.StartingPointLongitude),
+                    destination: new google.maps.LatLng(foundItem.EndingPointLatitude, foundItem.EndingPointLongitude),
+                    travelMode: "DRIVING",
+                    avoidHighways: foundItem.AvoidHighways
+                })
+                .then((response) => {
+                    directionsRenderer.setDirections(response);
+                    console.log(response);
+                })
+        }        
+    }
+
+    initMap();
+</script>

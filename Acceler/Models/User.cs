@@ -1,11 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Net;
 
 namespace Acceler.Models
 {
     public class User
     {
-        public string Id { get; set; }
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
 
         [Display(Name = "Korisničko ime")]
         public string Username { get; set; }
@@ -22,6 +26,7 @@ namespace Acceler.Models
 
         [Display(Name = "Broj mobitela")]
         public string Phone { get; set; }
-        public virtual IEnumerable<Ride> Rides { get; set; }
+
+        public virtual ICollection<Ride> JoinedRides { get; set; }
     }
 }

@@ -22,6 +22,8 @@ h2 {
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-left: 10rem;
+    margin-right: 10rem;
 }
 
 #ride_submit_div {

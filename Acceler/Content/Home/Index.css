@@ -1,5 +1,6 @@
 ﻿body{
     display: block;
+    background-color:black;
 }
 
 .homepage-title {
@@ -9,7 +10,7 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    color: white; /* Set text color */
+    color: white;
 }
 
 .banner_placeholder {
@@ -18,10 +19,46 @@
 }
 
 .banner_img {
-    max-width: 100%; /* Ensure the image doesn't exceed the container width */
+    max-width: 100%;
     width: 100%;
-    height: 30rem; /* Maintain aspect ratio */
+    height: 100vh;
     object-fit: cover;
-    display: block; /* Remove extra space below inline images */
+    display: block;
     margin: 0 auto;
+}
+
+.ad_section {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    text-align: center;
+    background-color: black;
+    margin-top: 2rem;
+}
+
+.ad_img {
+    width: 60%;
+    object-fit: cover;
+    display: block;
+    margin: 0 auto;
+}
+
+.ad_text {
+    font-family: 'Tangerine', cursive;
+    font-size: 4rem;
+    color: white;
+    background-color: black;
+
+}
+
+@media (max-width: 768px) {
+    .homepage-title {
+        font-family: 'Tangerine', cursive;
+        font-size: 6rem;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: white;
+    }
 }

@@ -1,0 +1,126 @@
+﻿@model Acceler.Models.ViewModels.ConversationViewModel
+
+@{
+    ViewBag.Title = "Inbox";
+}
+
+<link rel="stylesheet" href="~/Content/Account/Inbox.css" />
+
+<body>
+    <div class="searchDiv">
+        <input type="text" id="searchInput" oninput="searchUsers()" placeholder="Započni novi razgovor...">
+        <ul id="userList"></ul>
+    </div>
+
+    <div id="talkjs-container" style="width: 90%; margin: 30px; height: 40rem;">
+        <i>Loading chat...</i>
+    </div>
+
+</body>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/json2/20160511/json2.min.js"></script>
+
+<script>
+    (function (t, a, l, k, j, s) {
+        s = a.createElement('script'); s.async = 1; s.src = "https://cdn.talkjs.com/talk.js"; a.head.appendChild(s)
+            ; k = t.Promise; t.Talk = {
+                v: 3, ready: {
+                    then: function (f) {
+                        if (k) return new k(function (r, e) { l.push([f, r, e]) }); l
+                            .push([f])
+                    }, catch: function () { return k && new k() }, c: l
+                }
+            };
+    })(window, document, []);
+</script>
+
+<script>
+    function searchUsers() {
+        var input = document.getElementById('searchInput').value.toLowerCase();
+        var userList = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.OtherUsers));
+        var filteredUsers = userList.filter(function(user) {
+            return user.FirstName.toLowerCase().includes(input) || user.LastName.toLowerCase().includes(input);
+        });
+
+        displayUsers(filteredUsers);
+    }
+
+    function displayUsers(users) {
+        var userListElement = document.getElementById('userList');
+        userListElement.innerHTML = '';
+
+        users.forEach(function(user) {
+            var listItem = document.createElement('li');
+            listItem.textContent = user.FirstName + " " + user.LastName;
+            listItem.addEventListener('click', function() {
+                handleUserClick(user);
+            });
+
+            userListElement.appendChild(listItem);
+        });
+    }
+
+    function handleUserClick(user) {
+        var me = new Talk.User({
+            id: @Model.CurrentUser.Id,
+            name: "@Model.CurrentUser.FirstName @Model.CurrentUser.LastName",
+            email: "@Model.CurrentUser.Email",
+            photoUrl: "http://localhost:50213/Assets/Images/default_profile_image.jpg"
+        });
+
+        var other = new Talk.User({
+            id: user.Id,
+            name: user.FirstName + " " + user.LastName,
+            email: user.Email,
+            photoUrl: "http://localhost:50213/Assets/Images/default_profile_image.jpg"
+        });
+
+        var conversation = talkSession.getOrCreateConversation(
+            Talk.oneOnOneId(me, other)
+        );
+        conversation.setParticipant(me);
+        conversation.setParticipant(other);
+
+        var inbox = talkSession.createInbox({
+            theme: "default_dark"
+        });
+        inbox.select(conversation);
+        inbox.mount(document.getElementById('talkjs-container'));
+
+        userListElement.innerHTML = '';
+    }
+</script>
+
+<script>
+    Talk.ready.then(function () {
+        var me = new Talk.User({
+            id: @Model.CurrentUser.Id,
+            name: "@Model.CurrentUser.FirstName @Model.CurrentUser.LastName",
+            email: "@Model.CurrentUser.Email",
+            photoUrl: "http://localhost:50213/Assets/Images/default_profile_image.jpg"
+        });
+        window.talkSession = new Talk.Session({
+            appId: 'tj5vdCSy',
+            me: me,
+        });
+        var other = new Talk.User({
+            id: @Model.OtherUsers.First().Id,
+            name: "@Model.OtherUsers.First().FirstName @Model.OtherUsers.First().LastName",
+            email: "@Model.OtherUsers.First().Email",
+            photoUrl: "http://localhost:50213/Assets/Images/default_profile_image.jpg"
+        });
+
+        var conversation = talkSession.getOrCreateConversation(
+            Talk.oneOnOneId(me, other)
+        );
+        conversation.setParticipant(me);
+        conversation.setParticipant(other);
+
+        var inbox = talkSession.createInbox({
+            theme: "default_dark"
+        });
+        inbox.select(conversation);
+        inbox.mount(document.getElementById('talkjs-container'));
+    });
+</script>
+

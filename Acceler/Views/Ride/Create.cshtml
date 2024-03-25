@@ -7,13 +7,11 @@
 <link rel="stylesheet" href="~/Content/Ride/createRide.css">
 
 
-@model Acceler.Models.Ride
+@model Acceler.Models.DTO.RideDTO
 
 @{
     ViewBag.Title = "Create";
 }
-
-
 
 @using (Html.BeginForm())
 {
@@ -25,7 +23,7 @@
     <div id="ride_name_div">
         <h1>Prvo nadjeni ime svojoj novoj spektakularnoj vožnji!</h1>
         <div>
-            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "editor_for_name" } })
+            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "editor_for_name", id = "name" } })
             @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
         </div>
         <button id="btn_name_dalje" class="btn_dalje" type="button">Dalje</button>
@@ -50,61 +48,61 @@
             <div id="map" class="allMaps" style="height:80vh; width: 80%" ;"></div>
         </div>
         <div style="display: flex; flex-direction: column; align-items: center;">
-        @Html.LabelFor(model => model.StartingPointLatitude, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.StartingPointLatitude, new { htmlAttributes = new { @class = "form-control", id = "startingPointLatitude" } })
-            @Html.ValidationMessageFor(model => model.StartingPointLatitude, "", new { @class = "text-danger" })
-        </div>
-
-        @Html.LabelFor(model => model.StartingPointLongitude, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.StartingPointLongitude, new { htmlAttributes = new { @class = "form-control", id = "startingPointLongitude" } })
-            @Html.ValidationMessageFor(model => model.StartingPointLongitude, "", new { @class = "text-danger" })
-        </div>
-
-        @Html.LabelFor(model => model.EndingPointLatitude, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.HiddenFor(model => model.EndingPointLatitude, new { htmlAttributes = new { @class = "form-control", id = "endingPointLatitude" } })
-            @Html.ValidationMessageFor(model => model.EndingPointLatitude, "", new { @class = "text-danger" })
-        </div>
-
-        @Html.LabelFor(model => model.EndingPointLongitude, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.HiddenFor(model => model.EndingPointLongitude, new { htmlAttributes = new { @class = "form-control", id = "endingPointLongitude" } })
-            @Html.ValidationMessageFor(model => model.EndingPointLongitude, "", new { @class = "text-danger" })
-        </div>
-
-        <button id="btn_map_dalje" class="btn_dalje" type="button">Dalje</button>
-        </div>
-    </div>
-
-    @*<div class="form-group">
-            @Html.LabelFor(model => model.AvoidHighways, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.StartingPointLatitude, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                <div class="checkbox">
-                    @Html.EditorFor(model => model.AvoidHighways, new { id = "avoidHighways", value = false })
-                    @Html.ValidationMessageFor(model => model.AvoidHighways, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.StartingPointLatitude, new { htmlAttributes = new { @class = "form-control", id = "startingPointLatitude" } })
+                @Html.ValidationMessageFor(model => model.StartingPointLatitude, "", new { @class = "text-danger" })
+            </div>
+
+            @Html.LabelFor(model => model.StartingPointLongitude, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.StartingPointLongitude, new { htmlAttributes = new { @class = "form-control", id = "startingPointLongitude" } })
+                @Html.ValidationMessageFor(model => model.StartingPointLongitude, "", new { @class = "text-danger" })
+            </div>
+
+            @Html.LabelFor(model => model.EndingPointLatitude, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.EndingPointLatitude, new { htmlAttributes = new { @class = "form-control", id = "endingPointLatitude" } })
+                @Html.ValidationMessageFor(model => model.EndingPointLatitude, "", new { @class = "text-danger" })
+            </div>
+
+            @Html.LabelFor(model => model.EndingPointLongitude, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.EndingPointLongitude, new { htmlAttributes = new { @class = "form-control", id = "endingPointLongitude" } })
+                @Html.ValidationMessageFor(model => model.EndingPointLongitude, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.AvoidHighways, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <div class="checkbox">
+                        @Html.EditorFor(model => model.AvoidHighways, new { id = "avoidHighways", value = false })
+                        @Html.ValidationMessageFor(model => model.AvoidHighways, "", new { @class = "text-danger" })
+                    </div>
                 </div>
             </div>
-        </div>*@
+
+            <div class="waypoint-container" id="waypoint-container">
+            </div>
+
+            <button id="btn_map_dalje" class="btn_dalje" type="button">Dalje</button>
+        </div>
+    </div>
+       
 
     <div id="ride_submit_div" style="display:none;">
         <h1>Spremni smo kada i ti!</h1>
-        <input type="submit" value="Create" class="btn_dalje" />
+        <input type="button" value="Create" class="btn_dalje" id="ajax"/>
     </div>
 
 }
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
-
-
 @section scripts {
     <script>
         flatpickr('#flatpickr', {
-            dateFormat: 'd-m-Y',
-            enableTime: true
+            dateFormat: 'Y-m-d H:i',
+            enableTime: true,
+            minDate: "today",
+            time_24hr: true
         });
     </script>
 }
@@ -118,7 +116,6 @@
         var rideMapDiv = document.getElementById("ride_map_div");
         var rideDateDiv = document.getElementById("ride_date_div");
         var submitDiv = document.getElementById("ride_submit_div");
-
 
         if (btnNameDalje && rideNameDiv) {
             btnNameDalje.addEventListener("click", function () {
@@ -147,6 +144,7 @@
         defer></script>
 
 <script>
+    var allWaypoints = [];
     async function initMap() {
         const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
         const directionsRenderer = new google.maps.DirectionsRenderer();
@@ -160,14 +158,9 @@
 
         directionsRenderer.setMap(map);
 
-        var counter = 0;
         var allMarkers = [];
-        var allWaypoints = [];
-        var routeCalculated = false;
 
         map.addListener('click', function (e) {
-            console.log('markers before add', allMarkers.length)
-            console.log('waypoints before add', allMarkers.length)
             if (allMarkers.length < 2) {
                 selectedlat = e.latLng.lat();
                 selectedlng = e.latLng.lng();
@@ -181,72 +174,76 @@
 
                 switch (allMarkers.length) {
                     case 1:
-                        $('#startingPointLatitude').val(selectedlat);
-                        $('#startingPointLongitude').val(selectedlng);
-                        console.log("Updated value:", $('#startingPointLatitude').val());
-                        //document.getElementById("startingPointLatitude").val = selectedlat;
-                        //document.getElementById("startingPointLongitude").val = selectedlng;
+                        $('#startingPointLatitude').val(parseFloat(selectedlat));
+                        $('#startingPointLongitude').val(parseFloat(selectedlng));
                         break;
                     case 2:
-                        $('#endingPointLatitude').val(selectedlat);
-                        $('#endingPointLongitude').val(selectedlng);
-                        //document.getElementById("endingPointLatitude").value = selectedlat;
-                        //document.getElementById("endingPointLongitude").value = selectedlng;
+                        $('#endingPointLatitude').val(parseFloat(selectedlat));
+                        $('#endingPointLongitude').val(parseFloat(selectedlng));
                         break;
                     default:
                         break;
                 }
-                console.log('markers after add', allMarkers.length)
 
                 marker.addListener('click', function (e) {
                     marker.setMap(null);
                     allMarkers.splice(allMarkers.indexOf(marker), 1);
                 });
                 if (allMarkers.length == 2) {
-                    console.log(marker);
                     calculateAndDisplayRoute(directionsService, directionsRenderer, allMarkers, allWaypoints);
-                    routeCalculated = true;
                     document.getElementById("instructions_h").textContent = "Sada označi usputne točke ako ih ima.";
                     map.addListener('click', function (e) {
                         selectedlat = e.latLng.lat();
                         selectedlng = e.latLng.lng();
-                        const waypoint = { location: { lat: selectedlat, lng: selectedlng } }
+                        const waypoint = { location: { lat: parseFloat(selectedlat), lng: parseFloat(selectedlng) } }
                         allWaypoints.push(waypoint);
                         calculateAndDisplayRoute(directionsService, directionsRenderer, allMarkers, allWaypoints);
                     })
                 }
             }
             else {
-                console.log("cant go bruv");
+                console.log("You can't place any more markers!");
             }
         });
     }
-    //calculateAndDisplayRoute(directionsService, directionsRenderer);
-
-
-    //document.getElementById("mode").addEventListener("change", () => {
-    //    calculateAndDisplayRoute(directionsService, directionsRenderer);
-    //});
 
     function calculateAndDisplayRoute(directionsService, directionsRenderer, allMarkers, waypoints) {
-        var validationMessageElement = document.getElementById("avoidHighways");
-        console.log(validationMessageElement);
-
         directionsService
             .route({
                 origin: new google.maps.LatLng(allMarkers[0].position),
                 destination: new google.maps.LatLng(allMarkers[1].position),
                 travelMode: "DRIVING",
                 waypoints: waypoints
-                //avoidHighways: model.avoidHighways
             })
             .then((response) => {
                 directionsRenderer.setDirections(response);
-                console.log(response);
             })
-        /*.catch((e) => window.alert("Directions request failed due to " + error));*/
     }
 
     window.initMap = initMap;
 
+    document.getElementById("ajax").addEventListener("click", function (e) {
+        console.log("success")
+        const obj = {
+            Name: $('#name').val(),
+            Date: $('#flatpickr').val(),
+            StartingPointLatitude: $('#startingPointLatitude').val(),
+            StartingPointLongitude: $('#startingPointLongitude').val(),
+            EndingPointLatitude: $('#endingPointLatitude').val(),
+            EndingPointLongitude: $('#endingPointLongitude').val(),
+            Waypoints: allWaypoints.map(e => {
+                return { Latitude: e.location.lat, Longitude: e.location.lng }
+            })
+        }
+        $.ajax({
+            type: "POST",
+            url: "/Ride/Create",
+            data: JSON.stringify(obj),
+            contentType: "application/json; charset=utf-8",
+            traditional: true,
+            success: function () {
+                @Url.Action("Rides", "Ride")
+            }
+        })
+    })
 </script>
